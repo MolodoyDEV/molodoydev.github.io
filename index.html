@@ -1,1 +1,316 @@
-Hello Worldddd
+<title>MolodoyDEV - Runtime physical wire system</title>
+
+<head>
+	<h1>MolodoyDEV - Runtime physical wire system</h1>
+</head>
+
+<style>
+.section
+{
+ white-space: pre-wrap;
+}
+
+h2 {
+margin: auto;
+}
+
+h3 {
+margin: auto;
+}
+
+.class {
+color: darkgreen;
+font-weight: bold;
+}
+
+.interface {
+color: sandybrown;
+font-weight: bold;
+}
+
+.enum {
+color: sandybrown;
+font-weight: bold;
+}
+
+.T {
+color: sandybrown;
+font-weight: bold;
+}
+
+.keyword {
+color: blue;
+}
+
+</style>
+
+
+<body style="justify-self: center; width: 750px;">
+<nav>
+  <h2>Table of contents</h2>
+  <ul>
+    <li><a href="#section0">Links</a></li>
+    <li><a href="#section1">Introduction</a></li>
+    <li><a href="#section2">Demo scene</a></li>
+    <li><a href="#section3">Get started</a></li>
+    <li><a href="#section4">API references</a></li>
+	<ul>
+		<li><a href="#section4.0.0">Connected cord</a></li>
+		<ul>
+			<li><a href="#section4.0.1">ConnectedCordBase</a></li>
+			<li><a href="#section4.0.2">ConnectedCordPhysics</a></li>
+			<li><a href="#section4.0.3">ConnectorProperty</a></li>
+			<li><a href="#section4.0.4">ConnectedCordHelper</a></li>
+			<li><a href="#section4.0.5">WireControllerRuntime</a></li>
+			<li><a href="#section4.0.6">TubeRenderer</a></li>
+		</ul>
+		</li>
+		
+		<li><a href="#section4.1.0">Coil of cord</a></li>
+		<ul>
+			<li><a href="#section4.1.1">CoilOfCord</a></li>
+			<li><a href="#section4.1.2">UniversalCoilOfCord</a></li>
+			<li><a href="#section4.1.3">CordConnectedPrefabParams</a></li>
+		</ul>
+		</li>
+		
+		<li><a href="#section4.2.0">Physical sockets</a></li>
+		<ul>
+			<li><a href="#section4.2.1">PhysicalPortSimple</a></li>
+			<li><a href="#section4.2.2">WiredPhysicalPort</a></li>
+		</ul>
+		</li>
+		
+		<li><a href="#section4.3.0">Selection</a></li>
+		<ul>
+			<li><a href="#section4.3.1">Selectable</a></li>
+			<li><a href="#section4.3.2">SelectionMaterials</a></li>
+			<li><a href="#section4.3.3">SelectionProperties</a></li>
+		</ul>
+		</li>
+		
+		<li><a href="#section4.4.0">Utils</a></li>
+		<ul>
+			<li><a href="#section4.4.1">ConnectionSnapPoint</a></li>
+			<li><a href="#section4.4.2">SharedResourcesBase</a></li>
+			<li><a href="#section4.4.3">IHaveSnapPoint</a></li>
+			<li><a href="#section4.4.4">WiredConnectorType</a></li>
+			<li><a href="#section4.4.5">ConnectorFormat</a></li>
+		</ul>
+		</li>
+	</ul>
+  </ul>
+</nav>
+
+<div id="section0">
+	<h2>Links</h2>
+	<div style="padding-left: 30px;">
+		<h3>Telegram: <a href="https://t.me/your_ai_assistant" target="_blank">https://t.me/your_ai_assistant</a></h3>
+		<h3>Gmail: <a href="https://mail.google.com/mail/u/0/#inbox?compose=DmwnWsdBqtDcPGRXXWmMHzKMZfMSfJHWcjKmxlwNVFQCxlccrFxvZmHcHMfqZnNHLDGZlmKNGnsQ" target="_blank">sysadmproject.main@gmail.com</a></h3>
+		<h3>Asset store: <a href="https://assetstore.unity.com/packages/slug/315989" target="_blank">https://assetstore.unity.com/packages/slug/315989</a></h3>
+		<h3>Video tutorial: <a href="" target="_blank"></a></h3>
+	</div>
+</div>
+
+<br>
+<div id="section1">
+	<h2>Introduction</h2>
+	<div class="section">
+	This tool will allow you to create realistic wires at runtime and connect them to various types of sockets and plugs that you create yourself.
+	
+	You can change the length of the wires, attach the wires to the intermediate points and transfer data between the connected sockets.
+	
+	<b>Models and textures are not included in this package!</b>
+	
+	The project is completely customizable. You can add your own models and modify the source code to suit your needs.
+	
+	An example of using this tool from the game <i>"SysAdmin Odyssey. Back to the office"</i>:
+	
+	<img src="static/images/example.png" style="width: 750px">
+	</div>
+</div>
+
+<br>
+<div id="section2">
+	<h2>Demo scene</h2>
+	<div class="section">
+	In the demo scene, you can test the operation of the tool in different situations.
+	
+	<img src="static/images/demo_scene_layout.png" style="width: 750px">
+
+	Various types of cables (multicolored spheres) are placed on the scene. By going to the sphere and clicking the left mouse button, you select this cable to connect.
+	You can also create bundles of different cables.
+	
+	Each cable has different types of plugs that match the same type of sockets.
+	One cable may have different plugs at different ends of the cable.
+	
+	After you have selected the cable, you can point to the socket of the desired type (color) and left-click to create a connection.
+	The socket will be highlighted if at least one of the free cable plugs matches the type of this socket.
+	
+	Sockets can support different types of plugs, but a plug can only have one type. Imagine a USB socket, you can physically insert USB 2.0, USB 3.0, and USB 3.1 plugs into it.
+	
+	<b>How it works:</b>
+	You create a prefab of a cable by analogy with <i>"ConnectionSystem > Prefabs > Cord > ConnectedCord*"</i>
+	Then you create a prefab of a coil of wires in which you put one or more prefabs of a cable.
+	Now, when you select a coil of wires and point at the socket, the system checks whether this cable can be connected to this socket and, if so, highlights the socket.
+	
+	You can cancel the connection by pressing the ESC button or disconnect the connected cable by left-clicking on the socket.
+	</div>
+</div>
+
+<br>
+<div id="section3">
+	<h2>Get started</h2>
+	<div class="section">
+	<b>Preparation.</b>
+	
+	<b>Important! The following parameters must be set for the correct operation of the system:</b>
+	
+	<i>"Project Settings > Physics > Default Solver Iterations"</i>: Set between 10 to 20. In the demo scene, it's 15.
+	
+	Create a new layer, example: "wire".
+	Go to <i>"Project Settings > Physics > Layer Collision Matrix"</i> > disables collisions of the layer with itself.
+	
+	Set the layer "wire" in the prefabs Segment, WireBuilderRuntime and all prefabs under <i>"ConnectionSystem > Prefabs > Cord"</i> folder . Change childrens as well. 
+	
+	If you use URP add layer "wire" to URP Renderer Data > Filtering.
+	
+	Create you own wires and sockets prefabs based on <i>"ConnectionSystem > Prefabs"</i>.
+	
+	Configure parameters of WiredPhysicalPort, CoilOfCord and ConnectedCordPhysics scripts on prefabs.
+</div>
+
+<br>
+<div id="section4">
+	<h2>API references</h2>
+	<br>
+	<h2 id="section4.0.0">Connected cord</h2>
+	
+	<div id="section4.0.1" class="section">
+	<h3 class="class"><span class="keyword">public abstract class</span> ConnectedCordBase : MonoBehaviour</h3>
+	A basic abstract class that defines an interface for connecting cables to sockets and visualizing this process.
+	Uses ConnectorProperty to store information for each side of the cable.
+	</div>
+	
+	<div id="section4.0.2" class="section">
+	<h3 class="class"><span class="keyword">public class</span> ConnectedCordPhysics : ConnectedCordBase</h3>
+	Implementation of a physically correct cable.
+	Uses ConnectedCordHelper to control the connection creation process.
+	</div>
+	
+	<div id="section4.0.3" class="section">
+	<h3 class="class"><span class="keyword">public class</span> ConnectorProperty : ConnectedCordBase</h3>
+	Stores cable plugs settings such as Transform, Renderer, plug type and format
+	</div>
+
+	<div id="section4.0.4" class="section">
+	<h3 class="class"><span class="keyword">public class</span> ConnectedCordHelper : MonoBehaviour</h3>
+	Responds to user input and manages the process of creating a connection, changing the length of the cable, and visualizing.
+	Controls the length of the cable and allows you to fix the cable at intermediate points.
+	Uses the WireControllerRuntime to control the connected cable
+	</div>
+	
+	<div id="section4.0.5" class="section">
+	<h3 class="class"><span class="keyword">public class</span> WireControllerRuntime : MonoBehaviour</h3>
+	Controls the behavior of the connected cable. 
+	Allows you to add and remove segments, as well as freeze the physics of the cable. 
+	Uses TubeRenderer to render the cable.
+	</div>
+	
+	<div id="section4.0.6" class="section">
+	<h3 class="class"><span class="keyword">public class</span> TubeRenderer : MonoBehaviour</h3>
+	Responsible for rendering and rebuilding the mesh of the cable.
+	</div>
+	
+	<br>
+	<h2 id="section4.1.0">Coil of cord</h2>
+	
+	<div id="section4.1.1" class="section">
+	<h3 class="class"><span class="keyword">public class</span> CoilOfCord : MonoBehaviour</h3>
+	Provides an interface for creating a ConnectedCordBase instance from a prefab.
+	Sets basic parameters such as cable length and number of uses.
+	It is usually used by the player to create cables.
+	</div>
+	
+	<div id="section4.1.2" class="section">
+	<h3 class="class"><span class="keyword">public class</span> UniversalCoilOfCord : CoilOfCord</h3>
+	Expands the capabilities of CoilOfCord by allowing you to set several prefabs for wires, from which the appropriate one for connection will be selected.
+	Uses CordConnectedPrefabParams to store the configuration of each prefab.
+	</div>
+	
+	<div id="section4.1.3" class="section">
+	<h3 class="class"><span class="keyword">public class</span> CordConnectedPrefabParams</h3>
+	Stores the configuration of the ConnectedCordBase prefab.
+	</div>
+	
+	<br>
+	<h2 id="section4.2.0">Physical sockets</h2>
+	
+	<div id="section4.2.1" class="section">
+	<h3 class="class"><span class="keyword">public abstract class</span> PhysicalPortSimple : MonoBehaviour, <span class="interface">IHaveSnapPoint</span></h3>
+	The base class is a simple implementation of a physical socket with all the necessary interfaces.
+	Defines the plug format - ConnectorFormat.
+	It has an interface implementation for the correct placement of plugs in the sockets - IHaveSnapPoint.
+	</div>
+	
+	<div id="section4.2.2" class="section">
+	<h3 class="class"><span class="keyword">public class</span> WiredPhysicalPort : PhysicalPortSimple</h3>
+	A specific implementation of the physical socket where the cables are connected.
+	Defines the types of plug that can be connected to this socket - List<WiredConnectorType>.
+	</div>
+	
+	<br>
+	<h2 id="section4.3.0">Selection</h2>
+	
+	<div id="section4.3.1" class="section">
+	<h3 class="class"><span class="keyword">public class</span> Selectable : MonoBehaviour</h3>
+	Implements an interface for creating a semi-transparent model on top of an existing one while maintaining its mesh. 
+	It is used to create the effect of highlighting and highlighting an object.
+	</div>
+	
+	<div id="section4.3.2" class="section">
+	<h3 class="class"><span class="keyword">public class</span> SelectionMaterials : SharedResourcesBase<Material></h3>
+	Provides easy access to materials stored in the Resources folder.
+	</div>
+	
+	<div id="section4.3.3" class="section">
+	<h3 class="class"><span class="keyword">public class</span> SelectionProperties</h3>
+	Stores pre-prepared materials and parameters for selecting objects.
+	</div>
+	
+	<br>
+	<h2 id="section4.4.0">Utils</h2>
+	
+	<div id="section4.4.1" class="section">
+	<h3 class="class"><span class="keyword">public class</span> ConnectionSnapPoint : MonoBehaviour</h3>
+	It is an anchor point that allows you to correctly position objects relative to each other.
+	</div>
+	
+	<div id="section4.4.2" class="section">
+	<h3 class="class"><span class="keyword">public abstract class</span> SharedResourcesBase<<span class="T">Property_T</span>> <span class="keyword">where</span> <span class="T">Property_T</span> : Object</h3>
+	A universal class that allows you to conveniently describe and retrieve objects that are stored in the Resources folder.
+	</div>
+	
+	<div id="section4.4.3" class="section">
+	<h3 class="interface"><span class="keyword">public interface</span> IHaveSnapPoint</h3>
+	An interface that says that this object can be positioned relative to another object.
+	</div>
+	
+	<div id="section4.4.4" class="section">
+	<h3 class="enum"><span class="keyword">public enum</span> WiredConnectorType</h3>
+	The type of wired connection. 
+	You can add your own types to use when configuring your sockets and plugs.
+	</div>
+	
+	<div id="section4.4.5" class="section">
+	<h3 class="enum"><span class="keyword">public enum</span> ConnectorFormat</h3>
+	Plug format. It's always Mom or Dad.
+	The plugs can only be connected to sockets of a different type.
+	</div>
+</div>
+
+</body>
+
+<footer>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+</footer>
